@@ -8,7 +8,11 @@ import Create from "./Create";
 export default function Note() {
   const [data, setData] = useState(getInitialData());
   const [isArchived, setIsArchived] = useState(false);
-  const dataActive = data.filter((item) => item.archived === false);
+  const [search, setSearch] = useState("");
+  const dataActive =
+    search !== ""
+      ? data.filter((item) => item.title.toLowerCase().includes(search))
+      : data.filter((item) => item.archived === false);
   const dataArchived = data.filter((item) => item.archived === true);
 
   const ArchiveAction = (id) => {
@@ -19,10 +23,6 @@ export default function Note() {
           item2.archived = !item2.archived;
         })
     );
-  };
-
-  const SearchAction = (search) => {
-    setData(data.filter((item) => item.title.toLowerCase().includes(search)));
   };
 
   const DeleteAction = (id) => {
@@ -49,7 +49,7 @@ export default function Note() {
             label="Search"
             sx={{ m: 4 }}
             variant="standard"
-            onChange={(e) => SearchAction(e.target.value)}
+            onChange={(e) => setSearch(e.target.value)}
           />
         </Grid>
       </Grid>
